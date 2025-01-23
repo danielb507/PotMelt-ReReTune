@@ -73,9 +73,9 @@ public class FourSpec extends LinearOpMode {
 
         TrajectoryActionBuilder traj_5 = drive.actionBuilder(new Pose2d(-44, 60.5, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToSplineHeading(new Pose2d(-8,37.5, Math.toRadians(90)), Math.toRadians(270)); //score 3rd spec
+                .splineToSplineHeading(new Pose2d(-8,37, Math.toRadians(90)), Math.toRadians(270)); //score 3rd spec
 
-        TrajectoryActionBuilder traj_6 = drive.actionBuilder(new Pose2d(-8, 37.5, Math.toRadians(90)))
+        TrajectoryActionBuilder traj_6 = drive.actionBuilder(new Pose2d(-8, 37, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(-44, 61, Math.toRadians(270)), Math.toRadians(90)); //pick up 4th spec
 
@@ -85,9 +85,9 @@ public class FourSpec extends LinearOpMode {
 
         TrajectoryActionBuilder traj_7 = drive.actionBuilder(new Pose2d(-44, 60, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToSplineHeading(new Pose2d(-4, 37.5, Math.toRadians(90)), Math.toRadians(270)); //score 4th spec
+                .splineToSplineHeading(new Pose2d(-4, 37, Math.toRadians(90)), Math.toRadians(270)); //score 4th spec
 
-        TrajectoryActionBuilder traj_8 = drive.actionBuilder(new Pose2d(-4, 37.5, Math.toRadians(90)))
+        TrajectoryActionBuilder traj_8 = drive.actionBuilder(new Pose2d(-4, 37, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(-44, 57, Math.toRadians(270)), Math.toRadians(90)); //Park
 
@@ -164,11 +164,11 @@ public class FourSpec extends LinearOpMode {
                         armActions.raiseArmParm(30),
                         armActions.closeClaw(),
                         new ParallelAction(
-                                armActions.raiseArmParm(2150),
+                                armActions.raiseArmParm(2200),
                                 armActions.clawDown(),
                                 trajectory_5
                         ),
-                        armActions.halfLowerArm(),
+                        armActions.halfLowerArm(), //Score Spec three
                         armActions.openClaw(),
                         new ParallelAction(
                                 armActions.lowerArm(),
@@ -180,7 +180,7 @@ public class FourSpec extends LinearOpMode {
                         armActions.raiseArmParm(30),
                         armActions.closeClaw(),
                         new ParallelAction(
-                                armActions.raiseArmParm(2150),
+                                armActions.raiseArmParm(2200),
                                 armActions.clawDown(),
                                 trajectory_7
                         ),

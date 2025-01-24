@@ -69,7 +69,7 @@ public class FourSpec extends LinearOpMode {
 
         TrajectoryActionBuilder traj_45 = drive.actionBuilder(new Pose2d(-44, 61, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-44,60.5), Math.toRadians(270));
+                .splineToConstantHeading(new Vector2d(-44,60.25), Math.toRadians(270));
 
         TrajectoryActionBuilder traj_5 = drive.actionBuilder(new Pose2d(-44, 60.5, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))

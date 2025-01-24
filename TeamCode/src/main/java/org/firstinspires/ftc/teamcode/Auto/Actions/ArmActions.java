@@ -195,7 +195,7 @@ public class ArmActions {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    claw.setPosition(0.5);
+                    claw.setPosition(0.47);
                 }
 
                 return initialized;
@@ -209,7 +209,7 @@ public class ArmActions {
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                clawPivot.setPosition(.6);
+                clawPivot.setPosition(.68);
 
                 return initialized;
             }

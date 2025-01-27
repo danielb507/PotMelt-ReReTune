@@ -140,7 +140,7 @@ public class TestOpMode extends OpMode {
 
         if (gamepad1.a) {
             runningActions.add(
-                    armActions.openClaw()
+                    armActions.openClaw(1)
             );
             telemetry.addData("runningactions", runningActions);
         }
@@ -155,7 +155,6 @@ public class TestOpMode extends OpMode {
                 armActions.raiseClaw()
         );
 
-        runningActions.add(new InstantAction(() -> armActions.clawPivot.setPosition(0.61)));
 
         //gamepad 2
 
@@ -208,14 +207,32 @@ public class TestOpMode extends OpMode {
             runningActions.add(armActions.stopIntake());
         }
 
-        TrajectoryActionBuilder traj_8 = drive.actionBuilder(new Pose2d(0, 38, Math.toRadians(90)))
+        TrajectoryActionBuilder high_chamber_to_pickup = drive.actionBuilder(new Pose2d(0, 38, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-48, 55, Math.toRadians(270)), Math.toRadians(90));//Park
+                .splineToSplineHeading(new Pose2d(-48, 63, Math.toRadians(270)), Math.toRadians(90));
+
+        TrajectoryActionBuilder pickup_to_high_chamer = drive.actionBuilder(new Pose2d(-48, 55, Math.toRadians(270)))
+                .setTangent(Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(0, 34, Math.toRadians(90)), Math.toRadians(270));
+
         if(gamepad1.dpad_down){
             macroIsRunning = true;
             drive.updatePoseEstimate();
-            Actions.runBlocking(new ParallelAction(traj_8.build(), armActions.lowerArmAuto()));
+            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.lowerArmAuto(300)));
         }
+
+        if(gamepad1.dpad_up){
+            macroIsRunning = true;
+            drive.localizer.setPose(new Pose2d(-48, 55, Math.toRadians(270)));
+            Actions.runBlocking(new ParallelAction(pickup_to_high_chamer.build(), armActions.raiseArm()));
+        }
+
+        if(gamepad1.options){
+
+            armActions.leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            armActions.rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
         telemetry.addData("E", runningActions.size());
         dash.sendTelemetryPacket(packet);
 

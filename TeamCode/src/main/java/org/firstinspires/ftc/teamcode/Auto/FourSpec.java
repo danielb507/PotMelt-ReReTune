@@ -81,9 +81,9 @@ public class FourSpec extends LinearOpMode {
 
         TrajectoryActionBuilder traj_65 = drive.actionBuilder(new Pose2d(-44, 61, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-44,60), Math.toRadians(270));
+                .splineToConstantHeading(new Vector2d(-44,59.75), Math.toRadians(270));
 
-        TrajectoryActionBuilder traj_7 = drive.actionBuilder(new Pose2d(-44, 60, Math.toRadians(270)))
+        TrajectoryActionBuilder traj_7 = drive.actionBuilder(new Pose2d(-44, 59.75, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
                 .splineToSplineHeading(new Pose2d(-4, 37, Math.toRadians(90)), Math.toRadians(270)); //score 4th spec
 
@@ -172,7 +172,7 @@ public class FourSpec extends LinearOpMode {
                         armActions.openClaw(),
                         new ParallelAction(
                                 armActions.lowerArm(),
-                                armActions.halfOpenClaw(),
+                                armActions.halfOpenClaw(), //pick up spec 4
                                 armActions.raiseClaw(),
                                 trajectory_6
                         ),

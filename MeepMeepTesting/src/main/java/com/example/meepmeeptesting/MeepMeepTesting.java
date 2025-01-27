@@ -14,9 +14,9 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-48, 55, Math.toRadians(270)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-40, 60, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToSplineHeading(new Pose2d(0, 38, Math.toRadians(90)), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(0, 34, Math.toRadians(90)), Math.toRadians(270))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)

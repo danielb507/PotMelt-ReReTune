@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import java.util.ArrayList;
 import java.util.List;
-@TeleOp(name="sigma opMode", group="For Sigmas")
+@TeleOp(name="Macro OpMode", group="TeleOp")
 public class TestOpMode extends OpMode {
 
 
@@ -211,7 +211,7 @@ public class TestOpMode extends OpMode {
                 .setTangent(Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(-48, 63, Math.toRadians(270)), Math.toRadians(90));
 
-        TrajectoryActionBuilder pickup_to_high_chamer = drive.actionBuilder(new Pose2d(-48, 55, Math.toRadians(270)))
+        TrajectoryActionBuilder pickup_to_high_chamer = drive.actionBuilder(new Pose2d(-40, 60, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
                 .splineToSplineHeading(new Pose2d(0, 34, Math.toRadians(90)), Math.toRadians(270));
 
@@ -227,11 +227,6 @@ public class TestOpMode extends OpMode {
             Actions.runBlocking(new ParallelAction(pickup_to_high_chamer.build(), armActions.raiseArm()));
         }
 
-        if(gamepad1.options){
-
-            armActions.leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            armActions.rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
 
         telemetry.addData("E", runningActions.size());
         dash.sendTelemetryPacket(packet);

@@ -133,9 +133,6 @@ public class TestOpMode extends OpMode {
 
         telemetry.addData("ArmMacroVariable", armActions.armMacroIsRunning);
 
-        if(armActions.armMacroIsRunning) {
-            runningActions.add(armActions.lowerArm());
-        }
 
 
         if (gamepad1.a) {
@@ -150,10 +147,6 @@ public class TestOpMode extends OpMode {
             );
             telemetry.addData("runningactions", runningActions);
         }
-
-        runningActions.add(
-                armActions.raiseClaw()
-        );
 
 
         //gamepad 2
@@ -207,24 +200,34 @@ public class TestOpMode extends OpMode {
             runningActions.add(armActions.stopIntake());
         }
 
-        TrajectoryActionBuilder high_chamber_to_pickup = drive.actionBuilder(new Pose2d(0, 38, Math.toRadians(90)))
+        TrajectoryActionBuilder high_chamber_to_pickup = drive.actionBuilder(new Pose2d(-7, 34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
                 .splineToSplineHeading(new Pose2d(-48, 63, Math.toRadians(270)), Math.toRadians(90));
 
-        TrajectoryActionBuilder pickup_to_high_chamer = drive.actionBuilder(new Pose2d(-40, 60, Math.toRadians(270)))
+        TrajectoryActionBuilder pickup_to_high_chamber = drive.actionBuilder(new Pose2d(-48, 60, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
-                .splineToSplineHeading(new Pose2d(0, 34, Math.toRadians(90)), Math.toRadians(270));
+                .splineToSplineHeading(new Pose2d(-10, 34, Math.toRadians(90)), Math.toRadians(270));
 
-        if(gamepad1.dpad_down){
+        if(gamepad1.b){
             macroIsRunning = true;
+            drive.localizer.setPose(new Pose2d(-10, 34, Math.toRadians(90)));
             drive.updatePoseEstimate();
-            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.lowerArmAuto(300)));
+            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.raiseClaw(), armActions.lowerArmAuto(300)));
         }
 
-        if(gamepad1.dpad_up){
+        if(gamepad1.y){
             macroIsRunning = true;
-            drive.localizer.setPose(new Pose2d(-48, 55, Math.toRadians(270)));
-            Actions.runBlocking(new ParallelAction(pickup_to_high_chamer.build(), armActions.raiseArm()));
+            drive.localizer.setPose(new Pose2d(-48, 60, Math.toRadians(270)));
+            drive.updatePoseEstimate();
+            Actions.runBlocking(new ParallelAction(pickup_to_high_chamber.build(), armActions.clawDown(), armActions.raiseArm()));
+        }
+
+        if(gamepad1.dpad_down && !armActions.armMacroIsRunning){
+            Actions.runBlocking(new ParallelAction(armActions.clawDown(), armActions.setDriveMacro(false)));
+        }
+
+        if(gamepad1.dpad_up && !armActions.armMacroIsRunning){
+            Actions.runBlocking(new ParallelAction(armActions.raiseClaw(), armActions.setDriveMacro(false)));
         }
 
 

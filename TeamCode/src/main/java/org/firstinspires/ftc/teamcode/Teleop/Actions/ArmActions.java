@@ -75,7 +75,7 @@ public class ArmActions {
 
                 double pos = leftSlide.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 2000) {
+                if (pos < 2200) {
                     return true;
                 } else {
                     leftSlide.setPower(0);
@@ -109,6 +109,19 @@ public class ArmActions {
                     rightSlide.setPower(0);
                     return false;
                 }
+            }
+        };
+    }
+
+    public Action clawDown() {
+        return new Action() {
+            private boolean initialized;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                clawPivot.setPosition(.63);
+
+                return initialized;
             }
         };
     }
@@ -189,7 +202,6 @@ public class ArmActions {
                 if (!initialized) {
                     clawPivot.setPosition(.43);
                 }
-
                 return initialized;
             }
         };
@@ -253,7 +265,7 @@ public class ArmActions {
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                intakePivot.setPosition(0.47);
+                intakePivot.setPosition(0.54);
 
                 return initialized;
             }

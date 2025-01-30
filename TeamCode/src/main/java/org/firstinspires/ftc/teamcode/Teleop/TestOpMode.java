@@ -202,7 +202,7 @@ public class TestOpMode extends OpMode {
 
         TrajectoryActionBuilder high_chamber_to_pickup = drive.actionBuilder(new Pose2d(-7, 34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-48, 63, Math.toRadians(270)), Math.toRadians(90));
+                .splineToSplineHeading(new Pose2d(-48, 59, Math.toRadians(270)), Math.toRadians(90));
 
         TrajectoryActionBuilder pickup_to_high_chamber = drive.actionBuilder(new Pose2d(-48, 60, Math.toRadians(270)))
                 .setTangent(Math.toRadians(270))
@@ -212,7 +212,7 @@ public class TestOpMode extends OpMode {
             macroIsRunning = true;
             drive.localizer.setPose(new Pose2d(-10, 34, Math.toRadians(90)));
             drive.updatePoseEstimate();
-            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.raiseClaw(), armActions.lowerArmAuto(300)));
+            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.raiseClaw(), armActions.lowerArmAuto(200)));
         }
 
         if(gamepad1.y){

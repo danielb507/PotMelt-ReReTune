@@ -137,7 +137,7 @@ public class TestOpMode extends OpMode {
 
         if (gamepad1.a) {
             runningActions.add(
-                    armActions.openClaw(1)
+                    armActions.openClaw(.47)
             );
             telemetry.addData("runningactions", runningActions);
         }
@@ -212,7 +212,7 @@ public class TestOpMode extends OpMode {
             macroIsRunning = true;
             drive.localizer.setPose(new Pose2d(-10, 34, Math.toRadians(90)));
             drive.updatePoseEstimate();
-            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.raiseClaw(), armActions.lowerArmAuto(200)));
+            Actions.runBlocking(new ParallelAction(high_chamber_to_pickup.build(), armActions.openClaw(.47), armActions.raiseClaw(), armActions.lowerArmAuto(300)));
         }
 
         if(gamepad1.y){

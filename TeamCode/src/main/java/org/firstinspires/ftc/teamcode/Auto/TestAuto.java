@@ -1,65 +1,75 @@
 package org.firstinspires.ftc.teamcode.Auto;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.Auto.Actions.ArmActions;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
-@Autonomous(name = "TestAuto", group = "Autonomous")
+@Autonomous(name="PID", group="Auto")
 public class TestAuto extends LinearOpMode {
+    DcMotorEx left;
+    DcMotorEx right;
+
+    // target in encoder ticks for each motor
+    public static double reference = 10000;
+    double targetLeft = reference;
+    double targetRight = 1000;
+
+
+    // initialize error
+    double leftError = 1000;
+    double rightError = 1000;
+
+    // proportional gain
+    public static double Kp = 0.001;
+    public static double Ki = 0.0000001;
+    public static double Kd = 0.00001;
+
+    // pid controllers set with arbitrary values, use at your own risk
+    PIDController leftController = new PIDController(Kp,Ki,Kd);
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    TelemetryPacket packet = new TelemetryPacket();
+
 
     @Override
-    public void runOpMode() {
-
-        Pose2d startPose = new Pose2d(0, 38, Math.toRadians(90));
-
-        MecanumDrive drive = new MecanumDrive(hardwareMap, startPose);
-
-        if (hardwareMap == null) {
-            telemetry.addData("Error", "hardwareMap is not initialized");
-            telemetry.update();
-            return;
-        }
+    public void runOpMode() throws InterruptedException {
 
 
-        ArmActions armActions = new ArmActions(hardwareMap);
-        //ArmActions  Arm = new ArmActions(hardwareMap);
+        // configure your motors and other hardware stuff here
+        // make sure the strings match the names that you have set on your robot controller configuration
+        left = hardwareMap.get(DcMotorEx.class,"armMotor");
 
-        TrajectoryActionBuilder traj_8 = drive.actionBuilder(new Pose2d(0, 38, Math.toRadians(90)))
-                .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-48, 55, Math.toRadians(270)), Math.toRadians(90));//Park
 
-        //
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while (!isStopRequested() && !opModeIsActive()) {
-            telemetry.update();
-        }
-        telemetry.update();
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // wait until the start button is pressed
         waitForStart();
 
-        //Actions.runBlocking(armActions.raiseClaw());
-        //Actions.runBlocking(armActions.closeClaw());
 
-        if (isStopRequested()) return;
+        /*
+         * use proportional feedback to move drive train to reference
+         */
+        while (opModeIsActive()) {
+            packet.put("x", left.getCurrentPosition());
+            packet.put("status", "alive");
+            left.setPower(leftController.output(targetLeft,left.getCurrentPosition()));
+            packet.fieldOverlay()
+                    .setFill("blue")
+                    .fillRect(-20, -20, 40, 40);
+            dashboard.sendTelemetryPacket(packet);
 
 
-        Action trajectory_8;
+        }
 
-        trajectory_8 = traj_8.build();
 
-        Actions.runBlocking(
-                new SequentialAction(
-                        trajectory_8
-                )
-        );
     }
+
 }
